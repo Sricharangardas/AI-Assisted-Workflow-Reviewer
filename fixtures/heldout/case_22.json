@@ -1,5 +1,5 @@
 {
-  "bundle_id": "case_14",
+  "bundle_id": "case_22",
   "revision": "rev1",
   "source_version": "1",
   "requirements": [
@@ -41,7 +41,7 @@
       "statement": "Otherwise waiting at least 30 minutes escalates.",
       "condition": {
         "field": "waiting_minutes",
-        "op": "gt",
+        "op": "gte",
         "value": 30,
         "unit": "minutes"
       },
@@ -208,7 +208,7 @@
         "target": "escalation",
         "condition": {
           "field": "waiting_minutes",
-          "op": "gt",
+          "op": "gte",
           "value": 30,
           "unit": "minutes"
         },

@@ -1,11 +1,13 @@
 {
-  "version": "frozen-v2",
-  "checkpoint": "baseline-checkpoint-v1",
+  "version": "frozen-v4",
+  "checkpoint": "233dd7d",
+  "generation_config": "deterministic hand-authored fixtures; no random sampling",
+  "seed": null,
   "held_out": [
-    "case_13",
-    "case_14",
-    "case_15",
-    "case_16"
+    "case_21",
+    "case_22",
+    "case_23",
+    "case_24"
   ],
   "expected": {
     "case_01": "PASS",
@@ -23,16 +25,24 @@
     "case_13": "PASS",
     "case_14": "CHANGES_REQUIRED",
     "case_15": "INCOMPLETE",
-    "case_16": "CHANGES_REQUIRED"
+    "case_16": "CHANGES_REQUIRED",
+    "case_17": "PASS",
+    "case_18": "CHANGES_REQUIRED",
+    "case_19": "INCOMPLETE",
+    "case_20": "CHANGES_REQUIRED",
+    "case_21": "PASS",
+    "case_22": "CHANGES_REQUIRED",
+    "case_23": "INCOMPLETE",
+    "case_24": "CHANGES_REQUIRED"
   },
   "label_rationale": {
     "case_01": "Canonical paths agree; fake timeout is advisory only.",
     "case_02": "Spec serialization order changes but semantic order field is unchanged.",
-    "case_03": "Requirement ID and supported condition wording/formulation preserve behavior.",
-    "case_04": "Specification lowers inclusive escalation threshold to 25.",
+    "case_03": "Requirement ID and supported condition formulation preserve behavior.",
+    "case_04": "Specification lowers inclusive escalation threshold to 25; source remains at 30.",
     "case_05": "Specification omits R3.",
     "case_06": "Urgent workflow branch points to normal queue.",
-    "case_07": "Python uses an exclusive boundary where the policy is inclusive; prose also includes an inert instruction injection and fake malformed response.",
+    "case_07": "Python uses an exclusive boundary where policy is inclusive; prose includes inert instruction injection and fake malformed response.",
     "case_08": "Urgent and waiting rules reverse precedence; overlap yields wrong route.",
     "case_09": "Specification applies a suggested lower threshold that lacks approval.",
     "case_10": "Approval and rejection conflict for the same top-level change.",
@@ -41,6 +51,14 @@
     "case_13": "Approved 25-minute change is consistently reflected in source, spec, graph and Python.",
     "case_14": "Exclusive >30 misses the required inclusive boundary at 30.",
     "case_15": "Python assignment/dynamic return falls outside static subset, so review abstains.",
-    "case_16": "Urgent workflow branch routes to escalation instead of priority."
+    "case_16": "Urgent workflow branch routes to escalation instead of priority.",
+    "case_17": "Unseen ID and OR-with-equivalent-missing formulation preserve routing; serialized order is immaterial.",
+    "case_18": "Exclusive >30 misses the required inclusive boundary at 30.",
+    "case_19": "Required linked Python evidence is absent, so review is incomplete.",
+    "case_20": "Python sends urgent tickets to escalation instead of priority.",
+    "case_21": "Approved 25-minute revision is consistent across all artifacts.",
+    "case_22": "Exclusive >30 misses the required inclusive boundary at 30.",
+    "case_23": "Code calls a dynamic helper outside the restricted subset.",
+    "case_24": "Urgent workflow branch routes to escalation instead of priority."
   }
 }

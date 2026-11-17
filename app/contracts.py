@@ -103,6 +103,7 @@ class CodeArtifact(StrictModel):
     language: Literal["python"] = "python"
     source: str
     evidence: Evidence
+    references: dict[str, str] = Field(default_factory=dict)
 
 
 class ApprovalRecord(StrictModel):

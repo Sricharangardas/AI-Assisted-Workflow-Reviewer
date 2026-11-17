@@ -62,7 +62,7 @@ Evaluation writes `reports/final/evaluation.json`; ablation writes `reports/abla
   "findings": [{
     "finding_id": "code_behavior_...",
     "severity": "blocker",
-    "rule_reference": "R3",
+    "rule_reference": null,
     "artifact": "router.py",
     "artifact_version": "1",
     "evidence_location": "route",
@@ -80,7 +80,7 @@ Evaluation writes `reports/final/evaluation.json`; ablation writes `reports/abla
 
 ## Evaluation and reproducibility
 
-The frozen set has 16 synthetic cases: 4 valid, 8 defective, and 4 incomplete. Four fresh cases (13-16) are held out in `expected_labels.json`; the previously inspected cases are declared development. Labels and rationales were fixed from the written routing policy before the final run; the reviewer never reads them. Cases include approved/unapproved changes, conflicting approval records, omission, inclusive boundary, wrong branch, code disagreement, interaction/precedence, instruction injection, reordered records, renamed IDs, supported equivalent conditions, unsupported units, and missing evidence. Fake model failures are evaluated separately from semantic decisions.
+The frozen set has 24 synthetic cases: 6 valid, 12 defective, and 6 incomplete. Four fresh cases (21-24) are held out in `expected_labels.json`; previously inspected cases are declared development. Labels and rationales were fixed from the written routing policy before the final run; the reviewer never reads them. Cases include approved/unapproved changes, conflicting approval records, omission, inclusive boundary, wrong branch, code disagreement, interaction/precedence, instruction injection, reordered records, renamed IDs, supported equivalent conditions, unsupported units, and missing evidence. Fake model failures are evaluated separately from semantic decisions.
 
 See `reports/baseline/metrics.json`, `reports/final/evaluation.json`, and `reports/ablation/workflow_check_disabled.json`. These are observed offline runs, not live-model performance. Checkpoint and debugging history are described in `docs/engineering_note.md`.
 

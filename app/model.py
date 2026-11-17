@@ -17,7 +17,7 @@ class FakeClient(ModelClient):
         self.calls+=1
         if self.scenario=="timeout": raise TimeoutError("fake timeout")
         if self.scenario=="malformed": return '{"findings": ['
-        if self.scenario=="invented_ref": return json.dumps({"findings":[{"rule_reference":"R_DOES_NOT_EXIST","claim":"missing rule"}],"coverage":{"complete":True,"reviewed_rule_refs":[]}})
+        if self.scenario=="invented_ref": return json.dumps({"findings":[{"rule_reference":"R_DOES_NOT_EXIST","claim":"missing rule","evidence":"invented"}],"coverage":{"complete":True,"reviewed_rule_refs":["R1"]}})
         try:
             payload=json.loads(prompt.split("<ARTIFACT_JSON>\n",1)[1].split("\n</ARTIFACT_JSON>",1)[0])
             refs=[r["id"] for r in payload.get("requirements",[]) if isinstance(r,dict) and isinstance(r.get("id"),str)]
@@ -46,10 +46,11 @@ def request_advisory(client:ModelClient,bundle_json:str,known_rule_refs:set[str]
             if not isinstance(data.coverage.get("complete"),bool): raise ValueError("invalid coverage.complete")
             reviewed=data.coverage.get("reviewed_rule_refs")
             if not isinstance(reviewed,list) or any(not isinstance(x,str) or x not in known_rule_refs for x in reviewed): raise ValueError("invalid coverage references")
+            if data.coverage["complete"] and set(reviewed)!=known_rule_refs: raise ValueError("coverage does not include every known rule reference")
             claims={}
             for f in data.findings:
                 if f.get("rule_reference") and f["rule_reference"] not in known_rule_refs: raise ValueError("invented rule reference")
-                if f.get("evidence") and f["evidence"] not in evidence_strings: raise ValueError("uncited evidence")
+                if not isinstance(f.get("evidence"),str) or f["evidence"] not in evidence_strings: raise ValueError("uncited evidence")
                 ref=f.get("rule_reference")
                 if ref and ref in claims and claims[ref]!=f.get("claim"): raise ValueError("conflicting claims for one rule")
                 if ref: claims[ref]=f.get("claim")

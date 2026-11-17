@@ -1,5 +1,5 @@
 {
-  "bundle_id": "case_11",
+  "bundle_id": "case_23",
   "revision": "rev1",
   "source_version": "1",
   "requirements": [
@@ -43,7 +43,7 @@
         "field": "waiting_minutes",
         "op": "gte",
         "value": 30,
-        "unit": "fortnight"
+        "unit": "minutes"
       },
       "destination": "escalation",
       "order": 3,
@@ -99,7 +99,7 @@
         "field": "waiting_minutes",
         "op": "gte",
         "value": 30,
-        "unit": "fortnight"
+        "unit": "minutes"
       },
       "destination": "escalation",
       "order": 3,
@@ -210,7 +210,7 @@
           "field": "waiting_minutes",
           "op": "gte",
           "value": 30,
-          "unit": "fortnight"
+          "unit": "minutes"
         },
         "requirement_id": "R3",
         "order": 3,
@@ -242,7 +242,7 @@
       "name": "router.py",
       "version": "1",
       "language": "python",
-      "source": "def route(ticket):\n    if ticket.get('category') is None:\n        return 'manual_review'\n    if ticket.get('urgent') == True:\n        return 'priority_queue'\n    if ticket.get('waiting_minutes') >= 30:\n        return 'escalation'\n    return 'normal_queue'\n",
+      "source": "def route(ticket):\n    return choose_route(ticket)\n",
       "evidence": {
         "artifact": "router.py",
         "version": "1",

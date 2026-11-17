@@ -1,5 +1,5 @@
 {
-  "bundle_id": "case_09",
+  "bundle_id": "case_18",
   "revision": "rev1",
   "source_version": "1",
   "requirements": [
@@ -42,7 +42,7 @@
       "condition": {
         "field": "waiting_minutes",
         "op": "gte",
-        "value": 25,
+        "value": 30,
         "unit": "minutes"
       },
       "destination": "escalation",
@@ -55,39 +55,7 @@
       }
     }
   ],
-  "changes": [
-    {
-      "id": "chg1",
-      "requirement_id": "R3",
-      "scope": "requirement",
-      "effective_order": 1,
-      "approved": false,
-      "replacement": {
-        "id": "R3",
-        "statement": "Otherwise waiting at least 30 minutes escalates.",
-        "condition": {
-          "field": "waiting_minutes",
-          "op": "gte",
-          "value": 25,
-          "unit": "minutes"
-        },
-        "destination": "escalation",
-        "order": 3,
-        "evidence": {
-          "artifact": "requirements.md",
-          "version": "1",
-          "location": "R3",
-          "text": "waiting >= 30 minutes -> escalation."
-        }
-      },
-      "evidence": {
-        "artifact": "change.json",
-        "version": "2",
-        "location": "chg1",
-        "text": "Suggestion to lower threshold (unapproved)"
-      }
-    }
-  ],
+  "changes": [],
   "approvals": [],
   "spec_version": "1",
   "specification": [
@@ -129,8 +97,8 @@
       "requirement_id": "R3",
       "condition": {
         "field": "waiting_minutes",
-        "op": "gte",
-        "value": 25,
+        "op": "gt",
+        "value": 30,
         "unit": "minutes"
       },
       "destination": "escalation",
@@ -241,7 +209,7 @@
         "condition": {
           "field": "waiting_minutes",
           "op": "gte",
-          "value": 25,
+          "value": 30,
           "unit": "minutes"
         },
         "requirement_id": "R3",

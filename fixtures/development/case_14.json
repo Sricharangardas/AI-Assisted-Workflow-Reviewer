@@ -1,5 +1,5 @@
 {
-  "bundle_id": "case_10",
+  "bundle_id": "case_14",
   "revision": "rev1",
   "source_version": "1",
   "requirements": [
@@ -55,69 +55,8 @@
       }
     }
   ],
-  "changes": [
-    {
-      "id": "chg1",
-      "requirement_id": "R3",
-      "scope": "requirement",
-      "effective_order": 1,
-      "approved": true,
-      "approved_by": "owner",
-      "approved_at": "2026-01-01",
-      "replacement": {
-        "id": "R3",
-        "statement": "Otherwise waiting at least 30 minutes escalates.",
-        "condition": {
-          "field": "waiting_minutes",
-          "op": "gte",
-          "value": 25,
-          "unit": "minutes"
-        },
-        "destination": "escalation",
-        "order": 3,
-        "evidence": {
-          "artifact": "requirements.md",
-          "version": "1",
-          "location": "R3",
-          "text": "waiting >= 30 minutes -> escalation."
-        }
-      },
-      "evidence": {
-        "artifact": "change.json",
-        "version": "2",
-        "location": "chg1",
-        "text": "approved threshold change"
-      }
-    }
-  ],
-  "approvals": [
-    {
-      "id": "a1",
-      "change_id": "chg1",
-      "decision": "approved",
-      "actor": "owner",
-      "timestamp": "2026-01-01",
-      "evidence": {
-        "artifact": "approvals.json",
-        "version": "1",
-        "location": "a1",
-        "text": "approved"
-      }
-    },
-    {
-      "id": "a2",
-      "change_id": "chg1",
-      "decision": "rejected",
-      "actor": "owner",
-      "timestamp": "2026-01-01",
-      "evidence": {
-        "artifact": "approvals.json",
-        "version": "1",
-        "location": "a2",
-        "text": "rejected"
-      }
-    }
-  ],
+  "changes": [],
+  "approvals": [],
   "spec_version": "1",
   "specification": [
     {
@@ -158,7 +97,7 @@
       "requirement_id": "R3",
       "condition": {
         "field": "waiting_minutes",
-        "op": "gte",
+        "op": "gt",
         "value": 30,
         "unit": "minutes"
       },

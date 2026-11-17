@@ -1,0 +1,50 @@
+{
+  "status": "CHANGES_REQUIRED",
+  "summary": "CHANGES_REQUIRED: checked 3 effective requirements across 48 supported tickets.",
+  "findings": [
+    {
+      "finding_id": "spec_behavior_babdfd3",
+      "severity": "blocker",
+      "rule_reference": "R3",
+      "artifact": "spec.json",
+      "artifact_version": "1",
+      "evidence_location": "rules.R3",
+      "supporting_evidence": [
+        "Structured mapping of R3"
+      ],
+      "explanation": "Specification routes a supported ticket differently from the effective ordered requirements.",
+      "expected_behavior": "normal_queue",
+      "actual_behavior": "escalation",
+      "counterexample": {
+        "ticket": {
+          "category": "billing",
+          "urgent": false,
+          "waiting_minutes": 25
+        },
+        "expected_destination": "normal_queue",
+        "actual_destination": "escalation"
+      },
+      "recommended_correction": "Correct the condition, order, or destination to match the effective requirement."
+    }
+  ],
+  "coverage": {
+    "requirements_total": 3,
+    "requirements_in_spec": 3,
+    "ticket_domain_cases": 48,
+    "verification": "exhaustive over declared finite ticket domain; not arbitrary prose/code",
+    "unreviewed_scope": false
+  },
+  "check_results": {
+    "effective_requirements": true,
+    "specification_equivalence": false,
+    "workflow": true,
+    "code_static_inspection": true,
+    "code_syntax_validation": true,
+    "code_execution": false
+  },
+  "provenance": {
+    "bundle_id": "case_04",
+    "revision": "rev1",
+    "input_sha256": "1bb1e9cd4ae7c21d69ec595c51642678265f6391ead6133c24e23e0779ecb400"
+  }
+}

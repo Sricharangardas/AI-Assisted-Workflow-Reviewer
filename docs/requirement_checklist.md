@@ -12,7 +12,7 @@ Mapped against all three pages of `ShodhAI_MLAssessment.pdf` (R1-R3, Stages 1-4,
 | Equivalence, reordered serialized rules, renamed IDs, supported paraphrase | semantic conditions and cases 02/03 | frozen evaluation labels |
 | Model abstraction, fake, prompt, validation and bounded failures | `app/model.py` | malformed, timeout, invented-reference tests |
 | JSON status, evidence, coverage, check results; no arbitrary execution | `ReviewReport`, CLI | pytest suite; code execution explicitly false |
-| 12+ cases, 3 valid, 6 defective, 3 incomplete; 4 held out | frozen fixtures and separate labels | `app/evaluation.py`, `fixtures/expected_labels.json` |
+| 12+ cases, at least 3 valid, 6 defective, 3 incomplete; 4 held out | frozen 24-case set, separate labels; inspected cases explicitly declared development | `app/evaluation.py`, `fixtures/expected_labels.json` |
 | Baseline/final, metrics, debugging evidence, ablation | `reports/`, `docs/engineering_note.md` | generated actual-run results |
 | CPU offline install, CLI, pinned dependencies | `requirements.txt`, `run.py` | README single command |
 | Limitations, source grammar, restricted Python subset, AI disclosure | `docs/`, README | documented scope |

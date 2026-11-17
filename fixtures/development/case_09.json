@@ -42,7 +42,7 @@
       "condition": {
         "field": "waiting_minutes",
         "op": "gte",
-        "value": 25,
+        "value": 30,
         "unit": "minutes"
       },
       "destination": "escalation",
@@ -241,7 +241,7 @@
         "condition": {
           "field": "waiting_minutes",
           "op": "gte",
-          "value": 25,
+          "value": 30,
           "unit": "minutes"
         },
         "requirement_id": "R3",

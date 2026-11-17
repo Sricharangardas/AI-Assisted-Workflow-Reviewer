@@ -1,43 +1,48 @@
 {
-  "dataset": "frozen-v1",
-  "checkpoint": "pre-final semantic engine baseline",
-  "cases": 12,
+  "dataset": "frozen-v4",
+  "checkpoint": "233dd7d",
+  "cases": 24,
+  "case_composition": {
+    "valid": 6,
+    "defective": 12,
+    "incomplete": 6
+  },
   "held_out_cases": 4,
   "decision_correctness": {
-    "count": 12,
-    "denominator": 12
+    "count": 24,
+    "denominator": 24
   },
   "false_passes": {
     "count": 0,
-    "denominator": 9
+    "denominator": 12
   },
   "false_blocks": {
     "count": 0,
-    "denominator": 3
+    "denominator": 6
   },
   "incomplete_by_case_type": {
     "PASS": {
       "count": 0,
-      "denominator": 3
+      "denominator": 6
     },
     "CHANGES_REQUIRED": {
       "count": 0,
-      "denominator": 6
+      "denominator": 12
     },
     "INCOMPLETE": {
-      "count": 3,
-      "denominator": 3
+      "count": 6,
+      "denominator": 6
     }
   },
   "finding_quality": {
     "correct_defect_cases": {
-      "count": 6,
-      "denominator": 6
+      "count": 12,
+      "denominator": 12
     },
     "unsupported_findings": "not independently adjudicated",
     "location_scoring": "not separately scored; each emitted finding carries artifact/version/location"
   },
-  "runtime_seconds": 0.0691,
+  "runtime_seconds": 0.1229,
   "model_results": {
     "kind": "fake only",
     "calls": 4,
@@ -107,26 +112,110 @@
       "expected": "CHANGES_REQUIRED",
       "actual": "CHANGES_REQUIRED",
       "correct": true,
-      "held_out": true
+      "held_out": false
     },
     {
       "case": "case_10",
       "expected": "INCOMPLETE",
       "actual": "INCOMPLETE",
       "correct": true,
-      "held_out": true
+      "held_out": false
     },
     {
       "case": "case_11",
       "expected": "INCOMPLETE",
       "actual": "INCOMPLETE",
       "correct": true,
-      "held_out": true
+      "held_out": false
     },
     {
       "case": "case_12",
       "expected": "INCOMPLETE",
       "actual": "INCOMPLETE",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_13",
+      "expected": "PASS",
+      "actual": "PASS",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_14",
+      "expected": "CHANGES_REQUIRED",
+      "actual": "CHANGES_REQUIRED",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_15",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_16",
+      "expected": "CHANGES_REQUIRED",
+      "actual": "CHANGES_REQUIRED",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_17",
+      "expected": "PASS",
+      "actual": "PASS",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_18",
+      "expected": "CHANGES_REQUIRED",
+      "actual": "CHANGES_REQUIRED",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_19",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_20",
+      "expected": "CHANGES_REQUIRED",
+      "actual": "CHANGES_REQUIRED",
+      "correct": true,
+      "held_out": false
+    },
+    {
+      "case": "case_21",
+      "expected": "PASS",
+      "actual": "PASS",
+      "correct": true,
+      "held_out": true
+    },
+    {
+      "case": "case_22",
+      "expected": "CHANGES_REQUIRED",
+      "actual": "CHANGES_REQUIRED",
+      "correct": true,
+      "held_out": true
+    },
+    {
+      "case": "case_23",
+      "expected": "INCOMPLETE",
+      "actual": "INCOMPLETE",
+      "correct": true,
+      "held_out": true
+    },
+    {
+      "case": "case_24",
+      "expected": "CHANGES_REQUIRED",
+      "actual": "CHANGES_REQUIRED",
       "correct": true,
       "held_out": true
     }

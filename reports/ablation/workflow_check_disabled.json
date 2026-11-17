@@ -21,6 +21,31 @@
       "case": "case_06",
       "full": "CHANGES_REQUIRED",
       "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_13",
+      "full": "PASS",
+      "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_16",
+      "full": "CHANGES_REQUIRED",
+      "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_17",
+      "full": "PASS",
+      "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_21",
+      "full": "PASS",
+      "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_24",
+      "full": "CHANGES_REQUIRED",
+      "ablated": "INCOMPLETE"
     }
   ],
   "interpretation": "When workflow analysis is disabled, workflow-only defects are no longer established as blockers; status falls to INCOMPLETE because the required check was not reviewed."

@@ -1,14 +1,23 @@
 {
-  "bundle_id": "case_12",
+  "bundle_id": "case_17",
   "revision": "rev1",
   "source_version": "1",
   "requirements": [
     {
-      "id": "R1",
-      "statement": "Missing category goes to manual review.",
+      "id": "REQ_ALPHA",
+      "statement": "When category has no value, send the ticket to the manual review queue.",
       "condition": {
-        "field": "category",
-        "op": "missing"
+        "any": [
+          {
+            "field": "category",
+            "op": "missing"
+          },
+          {
+            "field": "category",
+            "op": "eq",
+            "value": null
+          }
+        ]
       },
       "destination": "manual_review",
       "order": 1,
@@ -60,19 +69,21 @@
   "spec_version": "1",
   "specification": [
     {
-      "id": "S_R1",
-      "requirement_id": "R1",
+      "id": "S_R3",
+      "requirement_id": "R3",
       "condition": {
-        "field": "category",
-        "op": "missing"
+        "field": "waiting_minutes",
+        "op": "gte",
+        "value": 30,
+        "unit": "minutes"
       },
-      "destination": "manual_review",
-      "order": 1,
+      "destination": "escalation",
+      "order": 3,
       "evidence": {
         "artifact": "spec.json",
         "version": "1",
-        "location": "rules.R1",
-        "text": "Structured mapping of R1"
+        "location": "rules.R3",
+        "text": "Structured mapping of R3"
       }
     },
     {
@@ -93,27 +104,25 @@
       }
     },
     {
-      "id": "S_R3",
-      "requirement_id": "R3",
+      "id": "S_R1",
+      "requirement_id": "REQ_ALPHA",
       "condition": {
-        "field": "waiting_minutes",
-        "op": "gte",
-        "value": 30,
-        "unit": "minutes"
+        "field": "category",
+        "op": "missing"
       },
-      "destination": "escalation",
-      "order": 3,
+      "destination": "manual_review",
+      "order": 1,
       "evidence": {
         "artifact": "spec.json",
         "version": "1",
-        "location": "rules.R3",
-        "text": "Structured mapping of R3"
+        "location": "rules.R1",
+        "text": "Structured mapping of R1"
       }
     }
   ],
   "workflow": {
     "version": "1",
-    "entry": "missing_entry",
+    "entry": "entry",
     "nodes": [
       {
         "id": "entry",
@@ -175,7 +184,7 @@
           "field": "category",
           "op": "missing"
         },
-        "requirement_id": "R1",
+        "requirement_id": "REQ_ALPHA",
         "order": 1,
         "evidence": {
           "artifact": "workflow.json",

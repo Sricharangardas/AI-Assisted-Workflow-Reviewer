@@ -99,7 +99,7 @@
         "field": "waiting_minutes",
         "op": "gte",
         "value": 30,
-        "unit": "fortnight"
+        "unit": "minutes"
       },
       "destination": "escalation",
       "order": 3,
@@ -210,7 +210,7 @@
           "field": "waiting_minutes",
           "op": "gte",
           "value": 30,
-          "unit": "fortnight"
+          "unit": "minutes"
         },
         "requirement_id": "R3",
         "order": 3,

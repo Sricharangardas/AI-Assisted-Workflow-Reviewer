@@ -18,6 +18,10 @@ def eval_expr(expr: Expr, ticket: dict[str, Any]) -> bool:
     if "any" in d: return any(eval_expr(Expr.model_validate(x), ticket) for x in d["any"])
     if "not" in d: return not eval_expr(Expr.model_validate(d["not"]), ticket)
     field, op, value = d.get("field"), d.get("op"), d.get("value")
+    if field not in FIELDS:
+        raise ValueError(f"unsupported field: {field}")
+    if d.get("unit") and field != "waiting_minutes":
+        raise ValueError("time units are only supported for waiting_minutes")
     actual = ticket.get(field)
     if op == "missing": return actual is None
     if op == "present": return actual is not None
@@ -49,7 +53,21 @@ def effective_requirements(bundle: Bundle):
     for a in bundle.approvals:
         by_change.setdefault(a.change_id, set()).add(a.decision)
     findings = []
+    change_ids={c.id for c in bundle.changes}
+    for approval in bundle.approvals:
+        if approval.change_id not in change_ids:
+            findings.append(("orphan_approval",approval.evidence,None,"Approval record references no declared change."))
+    order_groups={}
+    for c in bundle.changes:
+        order_groups.setdefault((c.requirement_id,c.effective_order),[]).append(c)
+    ambiguous_change_ids=set()
+    for (_, _),group in order_groups.items():
+        if len(group)>1:
+            ambiguous_change_ids.update(c.id for c in group)
+            findings.append(("change_order_conflict",group[0].evidence,group[0].requirement_id,"Multiple changes to one requirement have the same effective_order."))
     for c in sorted(bundle.changes, key=lambda x: x.effective_order):
+        if c.id in ambiguous_change_ids:
+            continue
         if c.scope == "revision" and c.revision != bundle.revision:
             if c.revision is None:
                 findings.append(("change_scope_ambiguous", c.evidence, c.requirement_id, "Revision-scoped change does not declare a target revision."))
@@ -101,10 +119,11 @@ def _py_expr(node: ast.AST) -> Expr:
 def _code_route(source: str, ticket: dict[str, Any]):
     """Inspect a restricted ordered route(ticket) function; never execute code."""
     tree = ast.parse(source)
-    if len(tree.body) != 1 or not isinstance(tree.body[0], (ast.FunctionDef, ast.AsyncFunctionDef)):
+    if len(tree.body) != 1 or not isinstance(tree.body[0], ast.FunctionDef):
         raise ValueError("expected one function definition")
     fn = tree.body[0]
-    if len(fn.args.args) != 1 or fn.args.args[0].arg != "ticket": raise ValueError("expected route(ticket)")
+    if fn.decorator_list or len(fn.args.args) != 1 or fn.args.args[0].arg != "ticket" or fn.args.vararg or fn.args.kwarg or fn.args.kwonlyargs:
+        raise ValueError("expected undecorated route(ticket) without dynamic arguments")
     def chain(statements):
         for node in statements:
             if isinstance(node,ast.If):
@@ -129,14 +148,30 @@ def _code_route(source: str, ticket: dict[str, Any]):
 
 def review(bundle: Bundle, use_graph=True, use_code=True) -> ReviewReport:
     findings: list[Finding] = []
+    incomplete = not use_graph or not use_code or not bundle.code or not bundle.requirements
     effective, approval_issues = effective_requirements(bundle)
+    if approval_issues:
+        incomplete=True
     for code, ev, ref, msg in approval_issues:
         findings.append(_finding(code, "incomplete", ref, ev.artifact, ev.version, ev.location, [ev.text], msg, correction="Resolve contradictory approval metadata and rerun review."))
+    effective_ids={r.id for r in effective}
+    for rule in bundle.specification:
+        if rule.requirement_id not in effective_ids:
+            incomplete=True
+            findings.append(_finding("unknown_spec_reference_"+rule.id,"incomplete",rule.requirement_id,"specification",bundle.spec_version,rule.evidence.location,[rule.evidence.text],"Specification rule references no effective source requirement.",correction="Map the rule to an effective requirement or remove the stale reference."))
+    for branch in bundle.workflow.branches:
+        if branch.requirement_id and branch.requirement_id not in effective_ids:
+            incomplete=True
+            findings.append(_finding("unknown_workflow_reference_"+branch.id,"incomplete",branch.requirement_id,"workflow",bundle.workflow.version,branch.evidence.location,[branch.evidence.text],"Workflow branch references no effective source requirement.",correction="Update the branch mapping to the effective requirement ID."))
+    for artifact in bundle.code:
+        for ref,loc in artifact.references.items():
+            if ref not in effective_ids:
+                incomplete=True
+                findings.append(_finding("unknown_code_reference_"+ref,"incomplete",ref,artifact.name,artifact.version,loc,[artifact.evidence.text],"Linked code mapping references no effective source requirement.",correction="Update the code mapping to an effective requirement ID."))
     spec = bundle.specification
     spec_by_ref: dict[str, list] = {}
     for s in spec: spec_by_ref.setdefault(s.requirement_id, []).append(s)
     # Unknown/ambiguous domains stay visible, never become passes.
-    incomplete = not use_graph or not use_code or not bundle.code or not bundle.requirements
     if not bundle.code:
         ev=bundle.requirements[0].evidence if bundle.requirements else None
         if ev:
@@ -154,9 +189,12 @@ def review(bundle: Bundle, use_graph=True, use_code=True) -> ReviewReport:
             matches = [s for s in spec if eval_expr(s.condition, t)]
             actual = sorted(matches, key=lambda s:s.order)[0].destination if matches else "normal_queue"
             if expected != actual:
-                req = next((r for r in effective if route([r], t) == expected), effective[0] if effective else None)
+                spec_refs={s.requirement_id for s in matches}
+                req = next((r for r in effective if r.id in spec_refs), None)
+                if req is None:
+                    req = next((r for r in sorted(effective,key=lambda x:x.order) if eval_expr(r.condition,t) and not any(eval_expr(ex,t) for ex in r.exceptions)), None)
                 ref = req.id if req else None
-                ev = next((s.evidence for s in matches), (req.evidence if req else bundle.requirements[0].evidence))
+                ev = next((s.evidence for s in matches if ref is None or s.requirement_id==ref), (req.evidence if req else bundle.requirements[0].evidence))
                 findings.append(_finding("spec_behavior_"+hashlib.sha1(json.dumps(t,sort_keys=True).encode()).hexdigest()[:7], "blocker", ref, ev.artifact, ev.version, ev.location, [ev.text], "Specification routes a supported ticket differently from the effective ordered requirements.", expected, actual, {"ticket":t,"expected_destination":expected,"actual_destination":actual}, "Correct the condition, order, or destination to match the effective requirement."))
                 break
         # Compare workflow using deterministic route-condition edges on reachable paths.
@@ -193,6 +231,7 @@ def review(bundle: Bundle, use_graph=True, use_code=True) -> ReviewReport:
                         findings.append(_finding("code_behavior_"+hashlib.sha1(json.dumps(t,sort_keys=True).encode()).hexdigest()[:7], "blocker", None, artifact.name, artifact.version, artifact.evidence.location, [artifact.evidence.text], "Linked Python route logic disagrees with effective ordered requirements; code was statically interpreted, not executed.", expected, actual, {"ticket":t,"expected_destination":expected,"actual_destination":actual}, "Correct the branch predicate or order.")); break
                 code_inspected=True
     except Exception as exc:
+        if isinstance(exc, SyntaxError): code_syntax=False
         incomplete=True
         evidence=bundle.code[0].evidence if bundle.code else bundle.requirements[0].evidence
         findings.append(_finding("scope_unreviewed", "incomplete", None, evidence.artifact, evidence.version, evidence.location, [str(exc)], "A required semantic check is outside the declared analyzer capability.", correction="Rewrite the artifact into the documented restricted subset or extend and test the analyzer."))
