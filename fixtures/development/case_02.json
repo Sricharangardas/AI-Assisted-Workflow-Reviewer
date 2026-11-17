@@ -1,0 +1,254 @@
+{
+  "bundle_id": "case_02",
+  "revision": "rev1",
+  "source_version": "1",
+  "requirements": [
+    {
+      "id": "R1",
+      "statement": "Missing category goes to manual review.",
+      "condition": {
+        "field": "category",
+        "op": "missing"
+      },
+      "destination": "manual_review",
+      "order": 1,
+      "evidence": {
+        "artifact": "requirements.md",
+        "version": "1",
+        "location": "R1",
+        "text": "Missing category -> manual review."
+      }
+    },
+    {
+      "id": "R2",
+      "statement": "Otherwise urgent tickets go to priority.",
+      "condition": {
+        "field": "urgent",
+        "op": "eq",
+        "value": true
+      },
+      "destination": "priority_queue",
+      "order": 2,
+      "evidence": {
+        "artifact": "requirements.md",
+        "version": "1",
+        "location": "R2",
+        "text": "Otherwise urgent ticket -> priority queue."
+      }
+    },
+    {
+      "id": "R3",
+      "statement": "Otherwise waiting at least 30 minutes escalates.",
+      "condition": {
+        "field": "waiting_minutes",
+        "op": "gte",
+        "value": 30,
+        "unit": "minutes"
+      },
+      "destination": "escalation",
+      "order": 3,
+      "evidence": {
+        "artifact": "requirements.md",
+        "version": "1",
+        "location": "R3",
+        "text": "waiting >= 30 minutes -> escalation."
+      }
+    }
+  ],
+  "changes": [],
+  "approvals": [],
+  "spec_version": "1",
+  "specification": [
+    {
+      "id": "S_R3",
+      "requirement_id": "R3",
+      "condition": {
+        "field": "waiting_minutes",
+        "op": "gte",
+        "value": 30,
+        "unit": "minutes"
+      },
+      "destination": "escalation",
+      "order": 3,
+      "evidence": {
+        "artifact": "spec.json",
+        "version": "1",
+        "location": "rules.R3",
+        "text": "Structured mapping of R3"
+      }
+    },
+    {
+      "id": "S_R2",
+      "requirement_id": "R2",
+      "condition": {
+        "field": "urgent",
+        "op": "eq",
+        "value": true
+      },
+      "destination": "priority_queue",
+      "order": 2,
+      "evidence": {
+        "artifact": "spec.json",
+        "version": "1",
+        "location": "rules.R2",
+        "text": "Structured mapping of R2"
+      }
+    },
+    {
+      "id": "S_R1",
+      "requirement_id": "R1",
+      "condition": {
+        "field": "category",
+        "op": "missing"
+      },
+      "destination": "manual_review",
+      "order": 1,
+      "evidence": {
+        "artifact": "spec.json",
+        "version": "1",
+        "location": "rules.R1",
+        "text": "Structured mapping of R1"
+      }
+    }
+  ],
+  "workflow": {
+    "version": "1",
+    "entry": "entry",
+    "nodes": [
+      {
+        "id": "entry",
+        "kind": "decision",
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "nodes.entry",
+          "text": "Decision entry"
+        }
+      },
+      {
+        "id": "manual_review",
+        "kind": "route",
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "nodes.manual_review",
+          "text": "Route manual_review"
+        }
+      },
+      {
+        "id": "priority_queue",
+        "kind": "route",
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "nodes.priority_queue",
+          "text": "Route priority_queue"
+        }
+      },
+      {
+        "id": "escalation",
+        "kind": "route",
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "nodes.escalation",
+          "text": "Route escalation"
+        }
+      },
+      {
+        "id": "normal_queue",
+        "kind": "route",
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "nodes.normal_queue",
+          "text": "Route normal_queue"
+        }
+      }
+    ],
+    "branches": [
+      {
+        "id": "b1",
+        "source": "entry",
+        "target": "manual_review",
+        "condition": {
+          "field": "category",
+          "op": "missing"
+        },
+        "requirement_id": "R1",
+        "order": 1,
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "branches.1",
+          "text": "Route for R1"
+        }
+      },
+      {
+        "id": "b2",
+        "source": "entry",
+        "target": "priority_queue",
+        "condition": {
+          "field": "urgent",
+          "op": "eq",
+          "value": true
+        },
+        "requirement_id": "R2",
+        "order": 2,
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "branches.2",
+          "text": "Route for R2"
+        }
+      },
+      {
+        "id": "b3",
+        "source": "entry",
+        "target": "escalation",
+        "condition": {
+          "field": "waiting_minutes",
+          "op": "gte",
+          "value": 30,
+          "unit": "minutes"
+        },
+        "requirement_id": "R3",
+        "order": 3,
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "branches.3",
+          "text": "Route for R3"
+        }
+      },
+      {
+        "id": "fallback",
+        "source": "entry",
+        "target": "normal_queue",
+        "condition": null,
+        "requirement_id": null,
+        "order": 4,
+        "evidence": {
+          "artifact": "workflow.json",
+          "version": "1",
+          "location": "branches.fallback",
+          "text": "Fallback route"
+        }
+      }
+    ]
+  },
+  "code": [
+    {
+      "name": "router.py",
+      "version": "1",
+      "language": "python",
+      "source": "def route(ticket):\n    if ticket.get('category') is None:\n        return 'manual_review'\n    if ticket.get('urgent') == True:\n        return 'priority_queue'\n    if ticket.get('waiting_minutes') >= 30:\n        return 'escalation'\n    return 'normal_queue'\n",
+      "evidence": {
+        "artifact": "router.py",
+        "version": "1",
+        "location": "route",
+        "text": "route(ticket)"
+      }
+    }
+  ]
+}

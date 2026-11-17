@@ -1,0 +1,46 @@
+{
+  "version": "frozen-v2",
+  "checkpoint": "baseline-checkpoint-v1",
+  "held_out": [
+    "case_13",
+    "case_14",
+    "case_15",
+    "case_16"
+  ],
+  "expected": {
+    "case_01": "PASS",
+    "case_02": "PASS",
+    "case_03": "PASS",
+    "case_04": "CHANGES_REQUIRED",
+    "case_05": "CHANGES_REQUIRED",
+    "case_06": "CHANGES_REQUIRED",
+    "case_07": "CHANGES_REQUIRED",
+    "case_08": "CHANGES_REQUIRED",
+    "case_09": "CHANGES_REQUIRED",
+    "case_10": "INCOMPLETE",
+    "case_11": "INCOMPLETE",
+    "case_12": "INCOMPLETE",
+    "case_13": "PASS",
+    "case_14": "CHANGES_REQUIRED",
+    "case_15": "INCOMPLETE",
+    "case_16": "CHANGES_REQUIRED"
+  },
+  "label_rationale": {
+    "case_01": "Canonical paths agree; fake timeout is advisory only.",
+    "case_02": "Spec serialization order changes but semantic order field is unchanged.",
+    "case_03": "Requirement ID and supported condition wording/formulation preserve behavior.",
+    "case_04": "Specification lowers inclusive escalation threshold to 25.",
+    "case_05": "Specification omits R3.",
+    "case_06": "Urgent workflow branch points to normal queue.",
+    "case_07": "Python uses an exclusive boundary where the policy is inclusive; prose also includes an inert instruction injection and fake malformed response.",
+    "case_08": "Urgent and waiting rules reverse precedence; overlap yields wrong route.",
+    "case_09": "Specification applies a suggested lower threshold that lacks approval.",
+    "case_10": "Approval and rejection conflict for the same top-level change.",
+    "case_11": "Source declares an unsupported time unit.",
+    "case_12": "Workflow entry points to absent node.",
+    "case_13": "Approved 25-minute change is consistently reflected in source, spec, graph and Python.",
+    "case_14": "Exclusive >30 misses the required inclusive boundary at 30.",
+    "case_15": "Python assignment/dynamic return falls outside static subset, so review abstains.",
+    "case_16": "Urgent workflow branch routes to escalation instead of priority."
+  }
+}

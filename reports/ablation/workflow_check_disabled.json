@@ -1,0 +1,27 @@
+{
+  "mechanism": "workflow reachability and destination verification",
+  "settings": "same frozen cases; no graph check in ablated path",
+  "changed_outcomes": [
+    {
+      "case": "case_01",
+      "full": "PASS",
+      "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_02",
+      "full": "PASS",
+      "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_03",
+      "full": "PASS",
+      "ablated": "INCOMPLETE"
+    },
+    {
+      "case": "case_06",
+      "full": "CHANGES_REQUIRED",
+      "ablated": "INCOMPLETE"
+    }
+  ],
+  "interpretation": "When workflow analysis is disabled, workflow-only defects are no longer established as blockers; status falls to INCOMPLETE because the required check was not reviewed."
+}
